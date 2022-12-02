@@ -1,7 +1,11 @@
-# gmall0105
+# 用户服务
+gmall-user-web 8080
+gmall-user-service 8070
 
-gmall-user-service 用户服务的 service 层端口 8070
-gmall-user-web 用户服务的 web 层端口 8080
+# 商品服务
+gmall-manage-web 8081
+gmall-manage-service 8071
 
-gmall-manage-service 商品服务的 service 层端口 8071
-gmall-manage-web 商品服务的 web 层端口 8081
+# 前台商品展示
+gmall-item-web 8082
+

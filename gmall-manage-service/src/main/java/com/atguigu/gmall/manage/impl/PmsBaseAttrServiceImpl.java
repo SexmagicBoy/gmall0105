@@ -8,8 +8,10 @@ import com.atguigu.gmall.manage.mapper.PmsBaseAttrValueMapper;
 import com.atguigu.gmall.service.PmsBaseAttrService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 import tk.mybatis.mapper.entity.Example;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -23,9 +25,24 @@ public class PmsBaseAttrServiceImpl implements PmsBaseAttrService {
 
     @Override
     public List<PmsBaseAttrInfo> attrInfoList(String catalog3Id) {
-        Example example = new Example(PmsBaseAttrInfo.class);
-        example.createCriteria().andEqualTo("catalog3Id", catalog3Id);
-        return pmsBaseAttrInfoMapper.selectByExample(example);
+        // 查询平台属性列表
+        Example infoExample = new Example(PmsBaseAttrInfo.class);
+        infoExample.createCriteria().andEqualTo("catalog3Id", catalog3Id);
+        List<PmsBaseAttrInfo> pmsBaseAttrInfos = pmsBaseAttrInfoMapper.selectByExample(infoExample);
+
+        // 为每个属性添加值，封装并返回
+        List<PmsBaseAttrInfo> vos = null;
+        if (!CollectionUtils.isEmpty(pmsBaseAttrInfos)){
+            vos = new ArrayList<>();
+            for (PmsBaseAttrInfo pmsBaseAttrInfo : pmsBaseAttrInfos) {
+                Example valueExample = new Example(PmsBaseAttrValue.class);
+                valueExample.createCriteria().andEqualTo("attrId",pmsBaseAttrInfo.getId());
+                List<PmsBaseAttrValue> pmsBaseAttrValues = pmsBaseAttrValueMapper.selectByExample(valueExample);
+                pmsBaseAttrInfo.setAttrValueList(pmsBaseAttrValues);
+                vos.add(pmsBaseAttrInfo);
+            }
+        }
+        return vos;
     }
 
     /**

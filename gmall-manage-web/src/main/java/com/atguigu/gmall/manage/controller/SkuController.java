@@ -1,26 +1,23 @@
 package com.atguigu.gmall.manage.controller;
 
 import com.alibaba.dubbo.config.annotation.Reference;
-import com.atguigu.gmall.bean.PmsBaseSaleAttr;
-import com.atguigu.gmall.service.PmsBaseSaleAttrService;
+import com.atguigu.gmall.bean.PmsSkuInfo;
+import com.atguigu.gmall.service.SkuService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.util.List;
-
-@Controller
 @CrossOrigin
-public class PmsBaseSaleAttrController {
-
+@Controller
+public class SkuController {
     @Reference
-    private PmsBaseSaleAttrService pmsBaseSaleAttrService;
+    private SkuService skuService;
 
+    @RequestMapping("saveSkuInfo")
     @ResponseBody
-    @RequestMapping("baseSaleAttrList")
-    public List<PmsBaseSaleAttr> list(){
-        return pmsBaseSaleAttrService.list();
+    public String saveSkuInfo(@RequestBody PmsSkuInfo pmsSkuInfo){
+        return skuService.saveSkuInfo(pmsSkuInfo);
     }
-
 }
