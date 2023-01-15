@@ -40,7 +40,6 @@ public class PmsSkuInfo implements Serializable {
     @Column
     String skuDefaultImg;
 
-
     @Transient
     List<PmsSkuImage> skuImageList;
 
@@ -49,8 +48,6 @@ public class PmsSkuInfo implements Serializable {
 
     @Transient
     List<PmsSkuSaleAttrValue> skuSaleAttrValueList;
-
-
 
     public String getId() {
         return id;

@@ -4,7 +4,7 @@ import com.alibaba.dubbo.config.annotation.Reference;
 import com.atguigu.gmall.bean.PmsProductImage;
 import com.atguigu.gmall.bean.PmsProductInfo;
 import com.atguigu.gmall.bean.PmsProductSaleAttr;
-import com.atguigu.gmall.service.SpuService;
+import com.atguigu.gmall.service.PmsBaseAttr;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -18,7 +18,7 @@ import java.util.List;
 public class SpuController {
 
     @Reference
-    private SpuService spuService;
+    private PmsBaseAttr spuService;
 
     @RequestMapping("spuList")
     @ResponseBody

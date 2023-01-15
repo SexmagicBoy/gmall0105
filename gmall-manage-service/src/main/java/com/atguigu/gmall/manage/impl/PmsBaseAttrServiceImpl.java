@@ -6,6 +6,7 @@ import com.atguigu.gmall.bean.PmsBaseAttrValue;
 import com.atguigu.gmall.manage.mapper.PmsBaseAttrInfoMapper;
 import com.atguigu.gmall.manage.mapper.PmsBaseAttrValueMapper;
 import com.atguigu.gmall.service.PmsBaseAttrService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -13,6 +14,7 @@ import tk.mybatis.mapper.entity.Example;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class PmsBaseAttrServiceImpl implements PmsBaseAttrService {
@@ -32,11 +34,11 @@ public class PmsBaseAttrServiceImpl implements PmsBaseAttrService {
 
         // 为每个属性添加值，封装并返回
         List<PmsBaseAttrInfo> vos = null;
-        if (!CollectionUtils.isEmpty(pmsBaseAttrInfos)){
+        if (!CollectionUtils.isEmpty(pmsBaseAttrInfos)) {
             vos = new ArrayList<>();
             for (PmsBaseAttrInfo pmsBaseAttrInfo : pmsBaseAttrInfos) {
                 Example valueExample = new Example(PmsBaseAttrValue.class);
-                valueExample.createCriteria().andEqualTo("attrId",pmsBaseAttrInfo.getId());
+                valueExample.createCriteria().andEqualTo("attrId", pmsBaseAttrInfo.getId());
                 List<PmsBaseAttrValue> pmsBaseAttrValues = pmsBaseAttrValueMapper.selectByExample(valueExample);
                 pmsBaseAttrInfo.setAttrValueList(pmsBaseAttrValues);
                 vos.add(pmsBaseAttrInfo);
@@ -97,5 +99,11 @@ public class PmsBaseAttrServiceImpl implements PmsBaseAttrService {
         Example example = new Example(PmsBaseAttrValue.class);
         example.createCriteria().andEqualTo("attrId", attrId);
         return pmsBaseAttrValueMapper.selectByExample(example);
+    }
+
+    @Override
+    public List<PmsBaseAttrInfo> getAttrValueListByValueIds(Set<String> valueIdSet) {
+        String valueIdsStr = StringUtils.join(valueIdSet, ", ");
+        return pmsBaseAttrInfoMapper.selectAttrValueListByValueIds(valueIdsStr);
     }
 }

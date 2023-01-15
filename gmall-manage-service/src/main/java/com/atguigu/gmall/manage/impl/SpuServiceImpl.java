@@ -1,15 +1,12 @@
 package com.atguigu.gmall.manage.impl;
 
 import com.alibaba.dubbo.config.annotation.Service;
-import com.atguigu.gmall.bean.PmsProductImage;
-import com.atguigu.gmall.bean.PmsProductInfo;
-import com.atguigu.gmall.bean.PmsProductSaleAttr;
-import com.atguigu.gmall.bean.PmsProductSaleAttrValue;
+import com.atguigu.gmall.bean.*;
 import com.atguigu.gmall.manage.mapper.PmsProductImageMapper;
 import com.atguigu.gmall.manage.mapper.PmsProductInfoMapper;
 import com.atguigu.gmall.manage.mapper.PmsProductSaleAttrMapper;
 import com.atguigu.gmall.manage.mapper.PmsProductSaleAttrValueMapper;
-import com.atguigu.gmall.service.SpuService;
+import com.atguigu.gmall.service.PmsBaseAttr;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -19,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class SpuServiceImpl implements SpuService {
+public class SpuServiceImpl implements PmsBaseAttr {
 
     @Autowired
     private PmsProductInfoMapper pmsProductInfoMapper;
@@ -105,5 +102,26 @@ public class SpuServiceImpl implements SpuService {
         Example example = new Example(PmsProductImage.class);
         example.createCriteria().andEqualTo("productId", spuId);
         return pmsProductImageMapper.selectByExample(example);
+    }
+
+    @Override
+    public List<PmsProductSaleAttr> getSpuSaleAttrListCheckBySku(String productId, String skuId) {
+        /*// 查询销售属性
+        Example example = new Example(PmsProductSaleAttr.class);
+        example.createCriteria().andEqualTo("productId",productId);
+        List<PmsProductSaleAttr> pmsProductSaleAttrs = pmsProductSaleAttrMapper.selectByExample(example);
+
+        // 封装销售属性值
+        for (PmsProductSaleAttr pmsProductSaleAttr : pmsProductSaleAttrs) {
+            Example valueExample = new Example(PmsProductSaleAttrValue.class);
+            valueExample.createCriteria()
+                    .andEqualTo("productId",productId)
+                    .andEqualTo("saleAttrId",pmsProductSaleAttr.getSaleAttrId());
+            List<PmsProductSaleAttrValue> pmsProductSaleAttrValues = pmsProductSaleAttrValueMapper.selectByExample(valueExample);
+            pmsProductSaleAttr.setSpuSaleAttrValueList(pmsProductSaleAttrValues);
+        }*/
+
+        // 由于要封装行中被选中的 sku 进行高亮，所以不能用通用 mapper
+        return pmsProductSaleAttrMapper.selectSpuSaleAttrListCheckBySku(productId, skuId);
     }
 }

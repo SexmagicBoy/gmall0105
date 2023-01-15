@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.atguigu.gmall.manage.mapper.PmsBaseAttrInfoMapper">
+    <resultMap id="attrValueListByValueIds" type="pmsBaseAttrInfo" autoMapping="true">
+        <id column="pbai_id" property="id"/>
+        <collection property="attrValueList" ofType="pmsBaseAttrValue" autoMapping="true">
+            <id column="pbav_id" property="id"/>
+        </collection>
+    </resultMap>
+
+    <select id="selectAttrValueListByValueIds" resultMap="attrValueListByValueIds">
+        SELECT
+            pbai.*, pbai.id as pbai_id,
+            pbav.*, pbav.id as pbav_id
+        FROM pms_base_attr_info pbai
+        INNER JOIN pms_base_attr_value pbav
+        ON pbai.id = pbav.attr_id
+        AND pbav.id in (${valueIdsStr})
+    </select>
+</mapper>
